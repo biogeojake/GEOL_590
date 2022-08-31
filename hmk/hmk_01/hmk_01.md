@@ -1,8 +1,4 @@
----
-title: "hmk_01"
-format: gfm
-editor: visual
----
+# hmk_01
 
 ## Homework 1: A Quarto document on Github
 
@@ -12,6 +8,8 @@ This assignment is an exercise on using Github
 
 Here is a code block
 
-```{r}
+``` r
 sqrt(144)
 ```
+
+    [1] 12
