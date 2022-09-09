@@ -1,10 +1,5 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
-# hmk_02
+Hmk 2
+================
 
 ## Basics of base R
 
@@ -34,8 +29,8 @@ search()
 The packages forcats, stringr, dplyr, purrr, readr, tidyr, tibble,
 ggplot2, and tidyverse are all loaded when library(tidyverse) was
 executed in the block above. The packages stats, graphics, grDevices,
-utils, datasets, methods, and base are packages that are loaded "when R
-is invoked". Essentially, these are the default packages in R.
+utils, datasets, methods, and base are packages that are loaded “when R
+is invoked”. Essentially, these are the default packages in R.
 
 ### Assigning, Displaying, and Removing Variables
 
