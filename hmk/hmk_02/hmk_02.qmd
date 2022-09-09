@@ -29,11 +29,15 @@ This block demonstrates the assignment of numeric values to two objects, a and b
 ```{r}
 a <- 21/10
 b <- 20/9
-print("Is a less than b?")
+
+#Is a less than b?
 a < b
-print("Is a greater than b?")
+
+#Is a greater than b?
 a > b
-print("Is a equal to b?")
+
+
+#Is a equal to b?
 a == b
 ```
 
