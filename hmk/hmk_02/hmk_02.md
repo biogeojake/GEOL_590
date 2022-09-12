@@ -70,3 +70,5 @@ ls()
 ```
 
     character(0)
+
+The syntax of removing all the variables from the workspace is important to note. We use `list=ls()` to create a list of the all the workspace variables and use it as a parameter in the `rm()` function.
