@@ -9,35 +9,31 @@ visualization, such as `ggplot`.
 
 ``` r
 library(tidyverse)
-```
-
-``` r
 my_data <- read_csv('iron_raw_data_04.csv')
 ```
-
-    Rows: 50 Columns: 4
-    -- Column specification --------------------------------------------------------
-    Delimiter: ","
-    chr (2): core, color
-    dbl (2): depth, sample_mass
-
-    i Use `spec()` to retrieve the full column specification for this data.
-    i Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
 We can now use ggplot to make a custom figure. We can use the following
 code block to create a violin plot of sediment layer color with the mass
 of the sample used for analyses.
 
 ``` r
-ggplot(my_data) +
-  geom_violin(aes(x = color, y = sample_mass), trim = FALSE) + 
-  geom_boxplot(aes(x = color, y = sample_mass), width = 0.1) + 
+#Create a vector for the color palette of the violin plot
+color.palette <- c("gray10", "forestgreen", "gray50", "white")
+
+#Create an object for the violin plot (with various customizations)
+p <- ggplot(my_data, aes(x = color, y = sample_mass, fill = color)) +
+  geom_violin(color = "black", alpha = 0.65, trim = FALSE) + 
+  scale_fill_manual(values = color.palette)
+
+#Layer a boxplot onto the violin plot
+p + geom_boxplot(aes(x = color, y = sample_mass), fill = "white", width = 0.1) +
+  theme(legend.position = "none") +
   xlab("Layer Color") + ylab("Sample Mass (g)")
 ```
 
     Warning: Groups with fewer than two data points have been dropped.
 
-![](hmk_04_files/figure-gfm/unnamed-chunk-3-1.png)
+![](hmk_04_files/figure-gfm/unnamed-chunk-2-1.png)
 
 The violin plot is envoked with the `geom_violin()` function and writing
 `trim = FALSE` puts the tails on the ends of the plot. A warning is
@@ -52,6 +48,14 @@ violin plot.
 
 To make the axes more descriptive than the data frame column headers, we
 can write the labels using the `xlab()` and `ylab()` functions.
+
+Since the x-axis is a color category, it would be most intuitive to
+color the violin plots according to the color of the layer. The
+`color.palette` object establishes the color codes I decided to use for
+the violin plots (note: there are only four values specified since the
+Light Grey category is not represented in the violin plots). You can
+also use `alpha` to adjust the transparency of the object. This helps
+the overlying box plots become more visible.
 
 This is a good representation of the following data because it shows how
 sample mass was distributed for each sediment layer color type because
