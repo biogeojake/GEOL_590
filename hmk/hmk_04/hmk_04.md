@@ -52,3 +52,10 @@ violin plot.
 
 To make the axes more descriptive than the data frame column headers, we
 can write the labels using the `xlab()` and `ylab()` functions.
+
+This is a good representation of the following data because it shows how
+sample mass was distributed for each sediment layer color type because
+the geochemical analyses that follow afterwards may be impacted by how
+large the sample mass was. Therefore, it is a preliminary step to
+determine if accounting for that impact may non-uniformly affect our
+color categories.

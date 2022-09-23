@@ -31,3 +31,5 @@ The violin plot is envoked with the `geom_violin()` function and writing `trim =
 We can also layer additional graphs to the figure, such as a box-and-whisker plot to show additional statistical data like the sample medians and quartiles. This is done using the `geom_boxplot()` function. We specify the `width` parameter here to make the boxplot fit within the violin plot.
 
 To make the axes more descriptive than the data frame column headers, we can write the labels using the `xlab()` and `ylab()` functions.
+
+This is a good representation of the following data because it shows how sample mass was distributed for each sediment layer color type because the geochemical analyses that follow afterwards may be impacted by how large the sample mass was. Therefore, it is a preliminary step to determine if accounting for that impact may non-uniformly affect our color categories.
