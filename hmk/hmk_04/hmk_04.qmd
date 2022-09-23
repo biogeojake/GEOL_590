@@ -22,12 +22,11 @@ color.palette <- c("gray10", "forestgreen", "gray50", "white")
 
 #Create an object for the violin plot (with various customizations)
 p <- ggplot(my_data, aes(x = color, y = sample_mass, fill = color)) +
-  geom_violin(color = "black", alpha = 0.65, trim = FALSE) + 
+  geom_violin(color = "black", alpha = 0.65, trim = FALSE, show.legend = FALSE) + 
   scale_fill_manual(values = color.palette)
 
 #Layer a boxplot onto the violin plot
-p + geom_boxplot(aes(x = color, y = sample_mass), fill = "white", width = 0.1) +
-  theme(legend.position = "none") + theme_classic() + 
+p + geom_boxplot(aes(x = color, y = sample_mass), fill = "white", width = 0.1) + theme_classic() + 
   xlab("Layer Color") + ylab("Sample Mass (g)")
 ```
 
