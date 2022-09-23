@@ -27,7 +27,7 @@ p <- ggplot(my_data, aes(x = color, y = sample_mass, fill = color)) +
 
 #Layer a boxplot onto the violin plot
 p + geom_boxplot(aes(x = color, y = sample_mass), fill = "white", width = 0.1) +
-  theme(legend.position = "none") +
+  theme(legend.position = "none") + theme_classic() + 
   xlab("Layer Color") + ylab("Sample Mass (g)")
 ```
 
