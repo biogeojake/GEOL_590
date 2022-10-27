@@ -65,9 +65,12 @@ d3 <- relig_income %>%
 
 d3$income <- factor(d3$income, levels = c("<$10k", "$10-20k", "$20-30k", "$30-40k", "$40-50k", "$50-75k", "$75-100k", "$100-150k", ">150k", "Don't know/refused"))
 
-ggplot(d3, aes(x = income, y = count, color = religion)) +
-  geom_col() +
-  labs(x = "Income Range", y = "Count")
+ggplot(d3, aes(x = income, y = count, fill = religion)) +
+  geom_col(color = "black") +
+  scale_x_discrete(guide = guide_axis(n.dodge=2)) +
+  labs(x = "Income Range", y = "Count", fill = "Religion") +
+  guides(fill=guide_legend(ncol=4)) +
+  theme(legend.position = "bottom", legend.key.size = unit(0.5, "lines"))
 ```
 
 # Q3: merging
