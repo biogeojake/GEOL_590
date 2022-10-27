@@ -85,7 +85,9 @@ d3 <- relig_income %>%
   pivot_longer(!religion, names_to = "income", values_to = "count") %>%
   group_by(religion)
 
-ggplot(d3, aes(x = factor(income), y = count, color = religion)) +
+d3$income <- factor(d3$income, levels = c("<$10k", "$10-20k", "$20-30k", "$30-40k", "$40-50k", "$50-75k", "$75-100k", "$100-150k", ">150k", "Don't know/refused"))
+
+ggplot(d3, aes(x = income, y = count, color = religion)) +
   geom_col() +
   labs(x = "Income Range", y = "Count")
 ```
