@@ -1,5 +1,5 @@
-# HMK 8: summarising, reshaping, merging
-
+HMK 8: summarising, reshaping, merging
+================
 Jake Perez
 
 # Q1: Summarising operations and exploratory data analysis
@@ -11,31 +11,58 @@ library(nycflights13)
 
 ## Q1a
 
-I will use `group_by()` and `summarise()` to explore the dataset within `experiment1.csv`. The summary output is shown below.
+I will use `group_by()` and `summarise()` to explore the dataset within
+`experiment1.csv`. The summary output is shown below.
 
 ``` r
 d1 <- read_csv("experiment1.csv", show_col_types = FALSE) 
 
-d1_sum <- d1 %>%
-  group_by(balls) %>%
-  summarise(n = n(),
-            mean_x = mean(x),
-            sd_x = sd(x),
-            mean_y = mean(y),
-            sd_y = sd(y))
+d1 <- d1 %>%
+  group_by(balls)
+d1$balls <- factor(d1$balls)
+#  summarise(n = n(),
+ #           mean_x = mean(x),
+  #          sd_x = sd(x),
+   #         mean_y = mean(y),
+    #        sd_y = sd(y))
 
+ggplot(d1, aes(x = x, y = y, color = balls)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~balls)
+```
+
+    `geom_smooth()` using formula 'y ~ x'
+
+![](hmk_08_files/figure-gfm/unnamed-chunk-2-1.png)
+
+``` r
+d1_sum <- d1 %>%
+  summarise(n = n(),
+           mean_x = mean(x),
+           sd_x = sd(x),
+           mean_y = mean(y),
+           sd_y = sd(y))
 d1_sum
 ```
 
     # A tibble: 4 x 6
       balls     n mean_x  sd_x mean_y  sd_y
-      <dbl> <int>  <dbl> <dbl>  <dbl> <dbl>
-    1     1    11      9  3.32   7.50  2.03
-    2     2    11      9  3.32   7.50  2.03
-    3     3    11      9  3.32   7.5   2.03
-    4     4    11      9  3.32   7.50  2.03
+      <fct> <int>  <dbl> <dbl>  <dbl> <dbl>
+    1 1        11      9  3.32   7.50  2.03
+    2 2        11      9  3.32   7.50  2.03
+    3 3        11      9  3.32   7.5   2.03
+    4 4        11      9  3.32   7.50  2.03
 
-The different groups (`balls` with values `1`, `2`, `3`, and `4`) have the same number of observations, mean and standard deviations for `x`. The mean and standard deviations of `y` are nearly identical with very small differences within the thousandths or tens thousandths places. In other words, these groups are nearly identical statistically.
+The different groups (`balls` with values `1`, `2`, `3`, and `4`) have
+the same number of observations, mean and standard deviations for `x`.
+The mean and standard deviations of `y` are nearly identical with very
+small differences within the thousandths or tens thousandths places. In
+other words, these groups are nearly identical statistically.
+
+However, based on the plot, these data sets have wildly different
+distributions. These data sets show how different trends in data can
+have the same statistical information.
 
 ## Q1b
 
@@ -44,14 +71,27 @@ I will repeat this process with a second dataset in `experiment2.csv`.
 ``` r
 d2 <- read_csv("experiment2.csv", show_col_types = FALSE)
 
+d2 <- d2 %>%
+  group_by(dataset)
+
 d2_sum <- d2 %>%
-  group_by(dataset) %>%
   summarise(n = n(),
             mean_x = mean(x),
             sd_x = sd(x),
             mean_y = mean(y),
             sd_y = sd(y))
 
+ggplot(d2, aes(x = x, y = y, color = dataset)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~dataset)
+```
+
+    `geom_smooth()` using formula 'y ~ x'
+
+![](hmk_08_files/figure-gfm/unnamed-chunk-3-1.png)
+
+``` r
 d2_sum
 ```
 
@@ -72,13 +112,23 @@ d2_sum
     12 wide_lines   142   54.3  16.8   47.8  26.9
     13 x_shape      142   54.3  16.8   47.8  26.9
 
-There are many more groups within this dataset. The number of observations within each group is the same. The mean and standard deviations of both `x` and `y` appear to have more variation within the hundredths and thousandths place.
+There are many more groups within this dataset. The number of
+observations within each group is the same. The mean and standard
+deviations of both `x` and `y` appear to have more variation within the
+hundredths and thousandths place.
+
+Once again, looking at the data sets, these are clearly different and
+are very fun to look at.
 
 # Q2: pivoting
 
-We can explore the relationship between income and various religion by using the `relig_income` data set. I used `pivot_longer()` to adjust the data structure into a a more appropriate format to best use aesthetics and grouping to feed into `ggplot`.
+We can explore the relationship between income and various religion by
+using the `relig_income` data set. I used `pivot_longer()` to adjust the
+data structure into a a more appropriate format to best use aesthetics
+and grouping to feed into `ggplot`.
 
-We can then use a bar graph to to see the number of people with different income ranges by religion.
+We can then use a bar graph to to see the number of people with
+different income ranges by religion.
 
 ``` r
 d3 <- relig_income %>%
@@ -101,19 +151,32 @@ ggplot(d3, aes(x = income, y = count, fill = religion)) +
 
 ## Q3a: meaning of joins
 
-Explain the difference between a left join, a right join, an inner join, and an outer join.
+Explain the difference between a left join, a right join, an inner join,
+and an outer join.
 
-Left join will look at two data sets and preserve all objects on the left data set and join the values of right data set that match to objects in the left data set. Objects in the right data set but not in the left data set are removed from the joined data set.
+Left join will look at two data sets and preserve all objects on the
+left data set and join the values of right data set that match to
+objects in the left data set. Objects in the right data set but not in
+the left data set are removed from the joined data set.
 
-Right join will do the similar thing but preserve the right data set, join data from the left data set that is matched to the right data set, and remove objects in the left data set that are not present in the right.
+Right join will do the similar thing but preserve the right data set,
+join data from the left data set that is matched to the right data set,
+and remove objects in the left data set that are not present in the
+right.
 
-Inner join will preserve objects that are in both left and right data sets but remove objects that are not in both.
+Inner join will preserve objects that are in both left and right data
+sets but remove objects that are not in both.
 
 Outer join will preserve all objects that are in either data sets.
 
 ## Q3b: using joins
 
-We can observe potential relationships between departure delays and weather patterns by combing the `flights` and `weather` data sets using various joining functions. Here, I first mutated the `dep_time` into an integer by using integer division `%/%` to extract the hour. This will allow a smooth `left_join()` by matching `origin`, `year`, `month`, and `hour`. All other data in `flights` was removed for cleanliness.
+We can observe potential relationships between departure delays and
+weather patterns by combing the `flights` and `weather` data sets using
+various joining functions. Here, I first mutated the `dep_time` into an
+integer by using integer division `%/%` to extract the hour. This will
+allow a smooth `left_join()` by matching `origin`, `year`, `month`, and
+`hour`. All other data in `flights` was removed for cleanliness.
 
 ``` r
 #Store flights and weather into different dataframe objects
@@ -129,12 +192,16 @@ fw <- left_join(f, w)
 
     Joining, by = c("origin", "year", "month", "day", "hour")
 
-We can see if there is a relationship between departure delay and wind speed by developing a linear model with `lm()`. From the summary, there is a strong statistical relationship between the two. The `geom_smooth()` figure shows the strength of the linear model.
+We can see if there is a relationship between departure delay and wind
+speed by developing a linear model with `lm()`. From the summary, there
+is a strong statistical relationship between the two. The
+`geom_smooth()` figure shows the strength of the linear model.
 
 ``` r
 m <- lm(dep_delay ~ wind_speed, data = fw)
 summary(m)
 ```
+
 
     Call:
     lm(formula = dep_delay ~ wind_speed, data = fw)

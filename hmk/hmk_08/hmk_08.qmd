@@ -19,18 +19,32 @@ I will use `group_by()` and `summarise()` to explore the dataset within `experim
 ```{r}
 d1 <- read_csv("experiment1.csv", show_col_types = FALSE) 
 
-d1_sum <- d1 %>%
-  group_by(balls) %>%
-  summarise(n = n(),
-            mean_x = mean(x),
-            sd_x = sd(x),
-            mean_y = mean(y),
-            sd_y = sd(y))
+d1 <- d1 %>%
+  group_by(balls)
+d1$balls <- factor(d1$balls)
+#  summarise(n = n(),
+ #           mean_x = mean(x),
+  #          sd_x = sd(x),
+   #         mean_y = mean(y),
+    #        sd_y = sd(y))
 
+ggplot(d1, aes(x = x, y = y, color = balls)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~balls)
+
+d1_sum <- d1 %>%
+  summarise(n = n(),
+           mean_x = mean(x),
+           sd_x = sd(x),
+           mean_y = mean(y),
+           sd_y = sd(y))
 d1_sum
 ```
 
 The different groups (`balls` with values `1`, `2`, `3`, and `4`) have the same number of observations, mean and standard deviations for `x`. The mean and standard deviations of `y` are nearly identical with very small differences within the thousandths or tens thousandths places. In other words, these groups are nearly identical statistically.
+
+However, based on the plot, these data sets have wildly different distributions. These data sets show how different trends in data can have the same statistical information.
 
 ## Q1b
 
@@ -39,18 +53,27 @@ I will repeat this process with a second dataset in `experiment2.csv`.
 ```{r}
 d2 <- read_csv("experiment2.csv", show_col_types = FALSE)
 
+d2 <- d2 %>%
+  group_by(dataset)
+
 d2_sum <- d2 %>%
-  group_by(dataset) %>%
   summarise(n = n(),
             mean_x = mean(x),
             sd_x = sd(x),
             mean_y = mean(y),
             sd_y = sd(y))
 
+ggplot(d2, aes(x = x, y = y, color = dataset)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~dataset)
+
 d2_sum
 ```
 
 There are many more groups within this dataset. The number of observations within each group is the same. The mean and standard deviations of both `x` and `y` appear to have more variation within the hundredths and thousandths place.
+
+Once again, looking at the data sets, these are clearly different and are very fun to look at.
 
 # Q2: pivoting
 
