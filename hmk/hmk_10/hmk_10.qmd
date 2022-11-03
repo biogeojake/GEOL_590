@@ -1,0 +1,124 @@
+---
+title: "Homework 10: Decisions and loops"
+author: "Jake Perez"
+format: gfm
+editor: visual
+---
+
+```{r, message = FALSE}
+library(tidyverse)
+```
+
+# Decisions
+
+The `say_greeting()` function below will print out a greeting based on the current time and will print out the time and date to show that the greeting is suitable for the given time. It will also try to catch an error if the format is not correct (i.e. a time object). It is written with a `switch` statement as part of the challenge to use switches with more than one condition being checked. This function could also be achieved using a sequence of `if` and `else` statements.
+
+```{r}
+#Define function to take the current time as the default
+say_greeting <- function(time = lubridate::now()) {
+  if(is.numeric(time)){
+    t <- time
+  } else {
+    #Convert time to a HHMM format
+    tryCatch(
+      t <- as.numeric(strftime(time, format="%H%M")),
+    
+      #If the conversion fails, exit and report incorrect format
+      error = function(e) {
+        message("The time was not requested in the correct format")
+        return(NA)
+      }
+    )
+  }
+  #Establish benchmarks for time of day
+  time.of.day <- c(1200, 1800)
+  
+  #Create boolean vector based on time of the day
+  time.comp <- (time.of.day <= t)
+  
+  #Sum up the amount of TRUEs in the vector
+  sum <- sum(time.comp)
+  
+  #Convert number to character to use in switch
+  sum <- as.character(sum)
+  
+  #Print out message based on time of the day
+  print(switch(sum,
+    "0" = "Good Morning",
+    "1" = "Good Afternoon",
+    "2" = "Good Evening"))
+  
+  time
+}
+```
+
+The default parameter is the current time so it will run with no argument.
+
+```{r}
+say_greeting()
+```
+
+We can show how it can take a numeric time format HHMM below:
+
+```{r}
+say_greeting(1200)
+```
+
+# Loops
+
+We can calculate the means of every column in `mtcars` by using a for loop and creating a new vector called `mean`. We do so by creating a vector object to store it and then iterating over the elements and storing the new values. This code also names each element based on the column name.
+
+```{r}
+
+#Instantiate vector to put the means in
+mean.mtc <- vector("double", length = ncol(mtcars))
+
+#Loop through the length of mtcars
+for(i in seq_along(mtcars)) {
+  
+  #Place the mean of the i-th column of mtcars into the i-th element of mean
+  mean.mtc[i] <- mean(mtcars[[i]])
+}
+
+#Make the mean vector a named vector based on column headers
+names(mean.mtc) <- colnames(mtcars)
+
+mean.mtc
+```
+
+We can try to generalize this into a function for any dataframe. Here we will try to filter out any columns that are not numeric and only report the means of numeric columns.
+
+```{r}
+mean_df <- function(df) {
+  #Remove non-numeric columns
+  df_num <- select_if(df, is.numeric)
+  
+  #Instantiate a mean vector
+  mean.df <- vector("double", length = ncol(df_num))
+  
+  #Calculate means of each column
+  for(i in seq_along(df_num)){
+    mean.df[i] <- mean(df_num[[i]])
+  }
+  
+  #Store column names to the vector
+  names(mean.df) <- colnames(df_num)
+  
+  #Return the vector
+  mean.df
+}
+```
+
+We can test this function on a dataframe like `diamonds`.
+
+```{r}
+mean_df(diamonds)
+```
+
+We can see that the non-numeric columns like `cut`, `color`, and `clarity` are excluded from the output.
+
+## Why not loops
+
+In R, we generally encourage people to use vectorized functions instead of `for` loops. According to [your textbook](https://r4ds.had.co.nz/iteration.html), what is better about vectorized functions?
+
+Using `for` loops for duplication can be very tedious as it requires a lot of coding and syntax to ensure the iterative process is accurate which can be prone to error. Using vectorized functions means that we can perform our tasks that could have been done using iteration but in concise consistent way. Calling a function onto a vector or dataframe is less prone to error than writing a `for` loop to iterate over the vector/dataframe.
